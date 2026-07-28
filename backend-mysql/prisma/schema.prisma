@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Tool {
+  id          Int       @id @default(autoincrement())
+  name        String
+  category    String
+  condition   String    @default("good")
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  bookings    Booking[]
+}
+
+model Booking {
+  id           Int       @id @default(autoincrement())
+  toolId       Int
+  tool         Tool      @relation(fields: [toolId], references: [id])
+  borrowerName String
+  borrowedAt   DateTime  @default(now())
+  returnedAt   DateTime?
+}
