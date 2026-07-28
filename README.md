@@ -7,6 +7,48 @@ This repository contains:
 - `backend/` (Node + Express + MongoDB + JWT auth)
 - `backend-mysql/` (Node + Express + Prisma + MySQL)
 
+## Classroom Quickstart (5 Minutes)
+
+Use this if you just want to run the app quickly in class.
+
+1. Clone and install:
+
+```bash
+git clone https://github.com/ZubairKh/tool-library.git
+cd tool-library
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+2. Create `backend/.env` from the template:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+3. Edit `backend/.env` and set valid values for `MONGO_URI` and `JWT_SECRET`.
+
+4. Start backend (Terminal 1):
+
+```bash
+cd backend
+npm run dev
+```
+
+5. Start frontend (Terminal 2):
+
+```bash
+cd frontend
+npm run dev
+```
+
+6. Open the app:
+- Frontend: `http://localhost:5173`
+- API health: `http://localhost:4000/api/health`
+- Swagger docs: `http://localhost:4000/api-docs`
+
+Note: For MySQL mode, use `backend-mysql/.env.example` and run the Prisma steps in the full setup section below.
+
 ## Prerequisites
 
 - Node.js 18+
