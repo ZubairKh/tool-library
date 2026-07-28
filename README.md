@@ -86,6 +86,38 @@ MONGO_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=t
 JWT_SECRET=replace_with_a_long_random_secret
 ```
 
+#### How to get `MONGO_URI` from MongoDB Atlas
+
+1. Go to https://www.mongodb.com/atlas and create/sign in to your account.
+2. Create a project and then create a cluster (the free tier is fine for class demo use).
+3. In Atlas, open **Database Access** and create a database user (username + password).
+4. Open **Network Access** and add your current IP address.
+- For classroom/demo only, you can temporarily allow `0.0.0.0/0` (less secure, not recommended for production).
+5. Open your cluster, click **Connect** -> **Drivers**.
+6. Copy the connection string that looks like:
+
+```text
+mongodb+srv://<username>:<password>@<cluster-url>/<database>?retryWrites=true&w=majority
+```
+
+7. Replace placeholders:
+- `<username>` with your Atlas DB username
+- `<password>` with your Atlas DB password
+- `<database>` with a database name, for example `tool_library`
+
+Example:
+
+```text
+mongodb+srv://teacher123:MyPass123@cluster0.abcd123.mongodb.net/tool_library?retryWrites=true&w=majority
+```
+
+8. Paste this final value into `backend/.env` as `MONGO_URI=...` and restart backend server if already running.
+
+If connection fails:
+- Re-check username/password
+- Confirm your IP is allowlisted in Atlas Network Access
+- Confirm special characters in password are URL-encoded
+
 ### 2) MySQL Backend (`backend-mysql/.env`)
 
 Create `backend-mysql/.env`:
