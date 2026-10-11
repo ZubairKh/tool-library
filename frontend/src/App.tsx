@@ -8,6 +8,7 @@ import { ToolList } from './components/ToolList';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { UserProfileCard } from './components/UserProfileCard';
+import { AIToolFinder } from './components/AIToolFinder';
 import './App.css';
 
 function MainApp() {
@@ -53,6 +54,8 @@ function MainApp() {
           <ToolForm onAdd={addTool} />
           {loading ? <p className="section-subtitle">Loading tools...</p> : <ToolList tools={tools} />}
         </section>
+
+        <AIToolFinder tools={tools} />
       </main>
       <Footer />
     </div>
