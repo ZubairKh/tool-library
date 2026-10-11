@@ -1,0 +1,22 @@
+[
+  {
+    "id": "furniture-assembly",
+    "task": "I need to assemble furniture for my new apartment.",
+    "expectedToolIds": ["t-screwdriver", "t-cordless-drill"]
+  },
+  {
+    "id": "concrete-drilling",
+    "task": "I need to drill into a concrete wall for wall anchors.",
+    "expectedToolIds": ["t-hammer-drill"]
+  },
+  {
+    "id": "wood-cutting",
+    "task": "I need to cut wooden trim pieces for a frame.",
+    "expectedToolIds": ["t-jigsaw"]
+  },
+  {
+    "id": "painting-wall",
+    "task": "I need to paint a bedroom wall evenly.",
+    "expectedToolIds": ["t-paint-roller", "t-paint-brush"]
+  }
+]

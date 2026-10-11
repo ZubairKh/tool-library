@@ -7,6 +7,35 @@ This repository contains:
 - `backend/` (Node + Express + MongoDB + JWT auth)
 - `backend-mysql/` (Node + Express + Prisma + MySQL)
 
+## AI Extension Overview
+
+This project now includes an **AI Tool Finder and Recommendation Assistant** for the Mongo backend path.
+
+Users can describe a task in natural language (for example, furniture assembly or drilling concrete), and the app returns recommended tools from the existing catalogue, plus explanation and caveats.
+
+### Why this use case fits AI
+
+- Task descriptions are unstructured natural language.
+- Tool metadata is structured and limited, so recommendations can be grounded to known catalogue entries.
+- Reasoning text helps students inspect both usefulness and limitations.
+
+### Architecture (Mongo active path)
+
+1. Frontend sends `task` text to `POST /api/tools/recommend`.
+2. Backend reads the current Mongo tool catalogue (`name`, `category`, `condition`, `isAvailable`, `_id`).
+3. Provider adapter selects either:
+- deterministic mock recommender (`AI_MOCK_MODE=true`) or
+- real provider integration (`AI_MOCK_MODE=false`, currently OpenAI-compatible).
+4. Backend validates provider output and filters recommendations so only existing catalogue tool IDs are returned.
+5. Frontend renders recommendations, unavailability status, notes, and limitations.
+
+### Key implementation principles
+
+- No tool invention: only current catalogue tools may be recommended.
+- No secret exposure: provider credentials stay in backend environment variables only.
+- Failure-safe behavior: timeout and malformed output handling return clear API errors.
+- Teaching reliability: deterministic mock mode supports demos without paid API access.
+
 ## Classroom Quickstart (5 Minutes)
 
 Use this if you just want to run the app quickly in class.
@@ -84,7 +113,20 @@ Create `backend/.env`:
 PORT=4000
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster>/<database>?retryWrites=true&w=majority
 JWT_SECRET=replace_with_a_long_random_secret
+AI_MOCK_MODE=true
+AI_TIMEOUT_MS=10000
+AI_PROVIDER=openai
+AI_MODEL=gpt-4o-mini
+AI_API_KEY=replace_with_provider_key_when_mock_mode_false
 ```
+
+AI variables:
+- `AI_MOCK_MODE=true`: deterministic local demo mode (no paid API needed)
+- `AI_MOCK_MODE=false`: use real provider adapter
+- `AI_TIMEOUT_MS`: provider request timeout in milliseconds
+- `AI_PROVIDER`: currently `openai`
+- `AI_MODEL`: model identifier used by provider adapter
+- `AI_API_KEY`: provider secret (backend only, do not expose in frontend)
 
 #### How to get `MONGO_URI` from MongoDB Atlas
 
@@ -142,6 +184,7 @@ The frontend currently calls:
 If you run backend on another host/port, update:
 - `frontend/src/api/auth.ts`
 - `frontend/src/api/tool.ts`
+- `frontend/src/api/recommendation.ts`
 
 ## Running the App
 
@@ -188,6 +231,40 @@ Mongo backend exposes:
 - `GET /api/auth/me`
 - `GET /api/tools`
 - `POST /api/tools`
+- `POST /api/tools/recommend`
+
+Recommendation request example:
+
+```json
+{
+	"task": "I need to drill into a concrete wall for wall anchors"
+}
+```
+
+Recommendation response example:
+
+```json
+{
+	"task": "I need to drill into a concrete wall for wall anchors",
+	"providerMode": "mock",
+	"recommendations": [
+		{
+			"toolId": "68f...",
+			"name": "Hammer Drill",
+			"category": "Power Tools",
+			"condition": "good",
+			"isAvailable": false,
+			"reason": "Matches common tooling patterns for tasks involving drill and concrete.",
+			"limitations": [
+				"Use correct drill bits and PPE when drilling into masonry or concrete.",
+				"This tool is currently unavailable in the catalogue."
+			],
+			"score": 8
+		}
+	],
+	"notes": []
+}
+```
 
 Swagger docs (Mongo backend):
 - `http://localhost:4000/api-docs`
@@ -198,6 +275,62 @@ MySQL backend exposes:
 - `POST /api/tools`
 - `GET /api/bookings`
 - `POST /api/bookings`
+
+## Evaluation and Testing
+
+This project includes fixed evaluation cases and backend tests for recommendation quality and failure handling.
+
+### Run backend tests
+
+```bash
+cd backend
+npm test
+```
+
+Covers:
+- invalid input
+- empty catalogue
+- unavailable tools
+- malformed provider output
+- provider timeout
+- filtering of non-catalogue tool IDs
+- deterministic mock behavior
+- predefined relevance checks
+
+### Run evaluation metrics (mock mode benchmark)
+
+```bash
+cd backend
+npm run eval:recommendations
+```
+
+This runs fixed cases in `backend/evaluation/recommendation-cases.json` and reports:
+- Hit@1
+- Hit@3
+- MRR (Mean Reciprocal Rank)
+
+Important: treat these values as a reproducible baseline for this dataset, not universal model accuracy.
+
+## End-to-End Demo Checklist
+
+1. Start Mongo backend (`backend`) and frontend (`frontend`).
+2. Sign up or sign in.
+3. Add at least 3 to 5 tools with mixed categories and availability.
+4. Open AI Tool Finder and run a task prompt.
+5. Verify returned tools are from current catalogue only.
+6. Verify unavailable tools are labeled as unavailable.
+7. Trigger invalid input (very short task) and observe frontend validation.
+8. Simulate provider failure/timeout (for example, disable key in real mode) and observe error state.
+9. Run `npm test` in backend and confirm all tests pass.
+10. Run `npm run eval:recommendations` and capture metrics for teaching discussion.
+
+## Five-Session Teaching Plan Mapping
+
+1. Session 1: business problem, AI suitability, MVP and success criteria.
+2. Session 2: architecture, provider adapter, prompt constraints and structured outputs.
+3. Session 3: backend endpoint and frontend AI Tool Finder integration.
+4. Session 4: testing and metric-based evaluation with limitations.
+5. Session 5: reproducibility, docs and final demonstration checklist.
 
 ## Share With Students
 
