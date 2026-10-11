@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/tools', require('./routes/recommendations').createRecommendationsRouter());
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
