@@ -96,6 +96,25 @@ test('rejects malformed provider output', async () => {
   assert.match(res.body.error, /malformed/i);
 });
 
+test('rejects non-array recommendations as malformed provider output', async () => {
+  const tools = [{ id: 't1', name: 'Screwdriver', category: 'Hand Tools', condition: 'good', isAvailable: true }];
+
+  const app = buildApp({
+    tools,
+    provider: {
+      mode: 'openai',
+      recommend: async () => ({ recommendations: null, notes: [] }),
+    },
+  });
+
+  const res = await request(app)
+    .post('/api/tools/recommend')
+    .send({ task: 'I need to assemble furniture' });
+
+  assert.equal(res.status, 502);
+  assert.match(res.body.error, /malformed/i);
+});
+
 test('returns timeout status when provider exceeds timeout', async () => {
   const tools = [{ id: 't1', name: 'Screwdriver', category: 'Hand Tools', condition: 'good', isAvailable: true }];
 
