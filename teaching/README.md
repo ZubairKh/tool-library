@@ -14,6 +14,7 @@ Use this folder as your day-by-day delivery guide.
 - Lecture 2: [LECTURE-02-Solution-Design.md](LECTURE-02-Solution-Design.md)
 - Lecture 3: [LECTURE-03-Implementation.md](LECTURE-03-Implementation.md)
 - Lecture 4: [LECTURE-04-Evaluation-Documentation.md](LECTURE-04-Evaluation-Documentation.md)
+- Instructor quick start: [INSTRUCTOR-QUICKSTART.md](INSTRUCTOR-QUICKSTART.md)
 
 ## Stage tags for live demo
 
