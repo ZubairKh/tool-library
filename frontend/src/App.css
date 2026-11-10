@@ -165,6 +165,12 @@ body {
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 1rem;
+  align-items: start;
+}
+
+.dashboard-main-column {
+  display: grid;
+  gap: 1rem;
 }
 
 .profile-card,
@@ -225,7 +231,7 @@ body {
 }
 
 .ai-finder-panel {
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .library-panel-head {

@@ -43,19 +43,21 @@ function MainApp() {
         <aside>
           <UserProfileCard user={user} />
         </aside>
-        <section className="library-panel">
-          <div className="library-panel-head">
-            <div>
-              <p className="eyebrow">Tools Library</p>
-              <h2 className="section-title">Share and Discover Community Tools</h2>
-              <p className="section-subtitle">Add your tools and keep your inventory visible to the community.</p>
+        <div className="dashboard-main-column">
+          <section className="library-panel">
+            <div className="library-panel-head">
+              <div>
+                <p className="eyebrow">Tools Library</p>
+                <h2 className="section-title">Share and Discover Community Tools</h2>
+                <p className="section-subtitle">Add your tools and keep your inventory visible to the community.</p>
+              </div>
             </div>
-          </div>
-          <ToolForm onAdd={addTool} />
-          {loading ? <p className="section-subtitle">Loading tools...</p> : <ToolList tools={tools} />}
-        </section>
+            <ToolForm onAdd={addTool} />
+            {loading ? <p className="section-subtitle">Loading tools...</p> : <ToolList tools={tools} />}
+          </section>
 
-        <AIToolFinder tools={tools} />
+          <AIToolFinder tools={tools} />
+        </div>
       </main>
       <Footer />
     </div>
