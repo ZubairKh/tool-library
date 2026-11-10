@@ -1,0 +1,6 @@
+# Local-only teaching materials
+/teaching/
+/teaching/**
+
+# macOS
+.DS_Store
