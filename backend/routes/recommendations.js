@@ -70,7 +70,7 @@ function createRecommendationsRouter(deps = {}) {
 
       return res.json({
         task: inputCheck.task,
-        providerMode: provider.mode,
+        providerMode: normalized.mode || provider.mode,
         recommendations: normalized.recommendations,
         notes: normalized.notes,
       });

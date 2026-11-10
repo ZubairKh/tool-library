@@ -87,6 +87,7 @@ function createOpenAIProvider({
           const bodyText = await response.text();
           const err = new Error(`Provider request failed with status ${response.status}`);
           err.code = 'PROVIDER_HTTP_ERROR';
+          err.status = response.status;
           err.details = bodyText.slice(0, 500);
           throw err;
         }
